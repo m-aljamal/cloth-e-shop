@@ -1,8 +1,8 @@
 import React from 'react';
 import './Button.scss'
-function Button({children, ...otherProps}) {
+function Button({children, isGoogleSignIn, ...otherProps}) {
     return (
-        <button className='Button' {...otherProps}>
+        <button className={`Button ${isGoogleSignIn && 'google-sign-in'}`} {...otherProps}>
             {/* children get the value provided in the button when it used */}
             {children}
         </button>

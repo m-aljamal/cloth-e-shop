@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Form_input from "../form-input/Form_input";
 import './Signin_component.scss'
 import Button from '../custom-btton/Button'
+import {signInWithGoogle} from '../../firebase/firebase.utils'
 function Signin_component() {
   const [email, setEmail] = useState("");
   const [password, setpassword] = useState("");
@@ -32,7 +33,12 @@ function Signin_component() {
           required
           handleChange={e => setpassword(e.target.value)}
         />
+        <div className='buttons'>
         <Button type="submit" >sign in</Button>
+        <Button onClick={signInWithGoogle} isGoogleSignIn>
+            sign in with Google
+            </Button>
+            </div>
       </form>
     </div>
   );
