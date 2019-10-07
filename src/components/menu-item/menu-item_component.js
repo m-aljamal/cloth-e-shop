@@ -1,7 +1,7 @@
 import React from "react";
 import { withRouter } from "react-router-dom"
 import "./menu-item_styles.scss";
-const MenuItem = ({ id, title, image, size, history, link, match }) => {
+const MenuItem = ({  title, image, size, history, link, match }) => {
     
   return (
     // add larger class if the component has a large in data

@@ -1,6 +1,8 @@
 import React from 'react';
 import {Link} from 'react-router-dom'
+import {connect} from 'react-redux'
 import {ReactComponent as Logo} from  '../../assets/crown.svg'
+import CardIcon from '../card-icon/CardIcon'
 import './Header-style.scss'
 import {auth} from '../../firebase/firebase.utils'
 function Header({currentUser}) {
@@ -18,10 +20,15 @@ function Header({currentUser}) {
                <div className='option' onClick={() => auth.signOut()}>SIGN OUT</div>
                 :
                 <Link className='option' to='/signin'>SIGN IN</Link>}
+                <CardIcon/>
             </div>
 
         </div>
     );
 
     }
-export default Header
+    // get the user value from the redux 
+    const mapStateToProps = (state) => ({
+        currentUser: state.user.currentUser
+    })
+export default connect(mapStateToProps) (Header)

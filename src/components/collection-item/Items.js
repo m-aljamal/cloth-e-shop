@@ -1,6 +1,6 @@
 import React from "react";
 import "./Items-style.scss";
-function Items({ id, name, price, imageUrl }) {
+function Items({name, price, imageUrl }) {
   return (
     <div className="Items">
       <div className="Items-image" style={{ backgroundImage: `url(${imageUrl})` }}/>

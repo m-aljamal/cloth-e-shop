@@ -1,0 +1,152 @@
+Good practice to update state if last state is needed like increment numbers:
+this.setState((prevState, prevProps) => {    prevProps is the props pass to component
+    retrun {stateName: prevState.stateName + prevProps.propsName}  if the props was 1 now it is 2
+})
+
+
+- sass-lang used to stye the app: 
+npm install --save sass  make file with name.scss 
+It let you write styles with no much scss selectors
+       
+
+-   <button className='Button' {...otherProps}>
+{/* children get the value provided in the button when it used */}
+{children}
+</button>       
+
+-******* Firebase *******************
+1: create a new project in firebase website by clicking go to consloe.
+2: in the Develop section to see the serveces auth, database.... storage is to store img audio assets
+3: go to Project overview -> web -> register app -> copy the code from firebaseConfig object.
+4: npm install --save firebase
+5: add new folder in src name it firebase -> add new file firebase.utils.js 
+6:      import firebase from 'firebase/app'
+import 'firebase/firestore'
+import 'firebase/auth'
+7:      const config = {
+    // copy the code from firebase web site from created app
+    
+}
+firebase.initializeApp(config);
+export const auth = firebase.auth()
+export const firestore = firebase.firestore()
+// set up log in with google
+const provider = new firebase.auth.GoogleAuthProvider()
+provider.setCustomParameters({prompt: 'select_account'})
+export const signInWithGoogle = () => auth.signInWithPopup(provider)
+export default firebase;
+8: to enaple google auth go to firebase site -> Authentication -> set up sign-in methoud - enable google 
+add the email of project support app your email -> save
+
+9:    import {signInWithGoogle} from '../../firebase/firebase.utils'   in app sign in component
+10:  <Button onClick={signInWithGoogle} >
+{''}
+sign in with Google
+</Button>     
+11: to see the users add go to firebase sit and click on Authentication -> users
+12: to add info to app from firebase sit: 
+-in app.js:  import {auth} from './firebase/firebase.utils'
+            create new state to save users in it  
+            const [currentUser, setCurrentUser] = useState(null)
+            // onAuthStateChanged is open conection and need to be closed in componentWillUnmount 
+            let unsubscribeFromAuth = null
+            useEffect(() =>{
+            // firebase send message if the user update and give if user has change
+            unsubscribeFromAuth = auth.onAuthStateChanged(user => {
+                setCurrentUser(user)
+                console.log(user)
+            })
+            },[])
+            // close connection in componentWillUnmount 
+            useEffect(() => {
+            return () => {
+                unsubscribeFromAuth();
+            }
+            }, []);
+              here I can see in the consloe the info of the user even if I open the site
+              from another tab in browser.
+- create the sign out:
+         show the sign out button when user is signed in
+         // signOut is pruvided from auth lipraray 
+         <div className='option' onClick={() => auth.signOut()}>SIGN OUT</div>
+
+- create sign in with email (not with google):
+            
+1: in firebase sit -> Database ->
+Create database -> 2 options locked or test mode (locked make database private) ->  if choose test
+-> in Database -> Rules.
+2: in Database on firebase site -> Databse -> add collection -> here can add the data needed 
+3: to query data from database:
+        import firebase from 'firebase/app'
+        import 'firebase/firestore'
+        const firestore = firebase.firestore()
+        firestore.collection('nameOfCollectionInFirebaseData')
+        .doc('idOfDoc').collection('nestedCollectionName').doc('idOfDoc')
+
+ could be done in another way:
+        firestore.doc('/nameOfCollectionInFirebaseData/idOfDoc/nestedCollectionName/idOfDoc') 
+
+- save the sign in users that comes from Google in database: 
+    export const createUserProfileDocument = async (userAuth, additionalData) => {
+        // check if there is no user exit form function
+        if (!userAuth) return;
+        // query the database to check if user in database
+        const userRef = firestore.doc(`users/${userAuth.uid}`);
+        const snapShot = await userRef.get();
+        // if user doesn't exists create new user 
+        if(!snapShot.exists){
+            const {displayName, email} = userAuth
+            const createdAt = new Date()
+    
+            try{
+                await userRef.set({
+                    displayName,
+                    email,
+                    createdAt,
+                    ...additionalData
+                })
+            } catch(error){
+                console.log('error creating user', error.message)
+            }
+        }
+        return userRef
+    };            
+
+in app.js update the useEffect fnction: 
+useEffect(() => {
+    // firebase send message if the user update and give if user has change
+    unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+    // check if user exist
+    if (userAuth) {
+        // if there is a user get the user ref from user document
+        const userRef = await createUserProfileDocument(userAuth);
+        // here we get the data that is for the user how loged in
+        userRef.onSnapshot(snapShot => {
+        setCurrentUser({
+            id: snapShot.id,
+            ...snapShot.data()
+        });
+        });
+    } else {
+        setCurrentUser(userAuth);
+    }
+    });
+}, []);
+
+    
+    
+********* redux section **************
+
+1: npm install --save redux redux-logger react-redux
+2: in index.js put the code and reducer codes:
+            import {Provider} from 'react-redux'  this round entire the all app, it is parent of the app
+            <Provider>
+                    <BrowserRouter>
+                      <App />
+                    </BrowserRouter>
+            </Provider>
+3: write the store:  
+        1.new folder in src name redux -> new file root-reducer.js will have all the state of app
+        2.create new folder inside redux name user so the state user from the app component will be moved here
+        
+        

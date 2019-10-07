@@ -4,7 +4,7 @@ import MenuItem from "../menu-item/menu-item_component";
 import sections from "./directory.data.js";
 const Directory = () => {
   // git the data from directory data file and pass it to the state
-  const [sectionsData, setSectionsData] = useState(sections);
+  const [sectionsData] = useState(sections);
 
   // loop throw the data and create a menuItem for each object
   const menuItems = sectionsData.map(section => (
