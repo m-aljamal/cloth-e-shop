@@ -6,10 +6,9 @@ import ShopPage from "./pages/shop-page/shop_component";
 import Header from "./components/header-component/Header";
 import SignIn from "./pages/singin-and-signup-page/SignIn";
 import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
-import {connect} from 'react-redux'
-import {setCurrentUser} from './redux/user_reducer/user_actions'
-function App(props) {
 
+function App() {
+const [currentUser, setCurrentUser] = useState(null)
   // onAuthStateChanged is open conection and need to be closed in componentWillUnmount
   let unsubscribeFromAuth = null;
   useEffect(() => {
@@ -21,13 +20,13 @@ function App(props) {
         const userRef = await createUserProfileDocument(userAuth);
         // here we get the data that is for the user how loged in
         userRef.onSnapshot(snapShot => {
-          props.setCurrentUser({
+          setCurrentUser({
             id: snapShot.id,
             ...snapShot.data()
           });
         });
       } else {
-        props.setCurrentUser(userAuth);
+        setCurrentUser(userAuth);
       }
     });
   }, []);
@@ -44,23 +43,16 @@ function App(props) {
       {/* this props is to check if user loged in dissplay sign out currentUser={currentUser} 
       this moved to redux
     */}
-      <Header />
+      <Header currentUser={currentUser}/>
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route exact path="/shop" component={ShopPage} />
         {/* make user cannot go to sign in if curent user is alredy sign in */}
-        <Route exacr path="/signin" render={() => props.currentUser ? (<Redirect to='/'/>) : < SignIn/>} />
+        <Route exacr path="/signin" render={() => currentUser ? (<Redirect to='/'/>) : < SignIn/>} />
       </Switch>
     </div>
   );
 }
-// to make the user go to another page after loged in need Redirect and current user
-const mapStateToProps = ({user}) =>({
-  currentUser: user.currentUser
-})
-const mapDispatchToProps = dispatch =>({
-setCurrentUser: user => dispatch(setCurrentUser(user))
-})
-export default connect(
-  mapStateToProps,
-   mapDispatchToProps ) (App);
+
+
+export default App;
