@@ -1,9 +1,30 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useReducer } from "react";
 import { auth, createUserProfileDocument } from "../firebase/firebase.utils";
+
+// ! Start Actions
+
+const CartReducer = (state, action) => {
+    switch (action.type) {
+        case 'TOGGLE_BUTTON':
+            return !state
+        default:
+            return state
+    }
+}
+
+// ! End Actions
+
+// Start create Context
+export const CartContext = createContext()
 
 export const UserContext = createContext();
 
-export const CurentUserProvider = props => {
+// End create Context
+
+// ? Start Provider
+export const App_context_Provider = props => {
+
+  const [isClicked, dispatch] = useReducer(CartReducer, false);
   const [currentUser, setCurrentUser] = useState(null);
 
   // onAuthStateChanged is open conection and need to be closed in componentWillUnmount
@@ -36,8 +57,10 @@ export const CurentUserProvider = props => {
   }, []);
 
   return (
+      <
     <UserContext.Provider value={currentUser}>
       {props.children}
     </UserContext.Provider>
   );
 };
+// ? End Provider

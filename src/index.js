@@ -5,11 +5,14 @@ import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import {CurentUserProvider} from './context/user_context'
+import {CartContextProvider} from './context/cart_contex'
 ReactDOM.render(
   <CurentUserProvider>
+    <CartContextProvider>
     <BrowserRouter>
       <App />
     </BrowserRouter>
+    </CartContextProvider>
     </CurentUserProvider>
   ,
   document.getElementById("root")

@@ -1,15 +1,17 @@
-import React,{useState, useContext}  from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { ReactComponent as Logo } from "../../assets/crown.svg";
 import CardIcon from "../card-icon/CardIcon";
 import "./Header-style.scss";
 import { auth } from "../../firebase/firebase.utils";
 import Cart_dropdown from "../cart-dropdown/Cart_dropdown";
-import {UserContext} from '../../context/user_context'
+import { UserContext } from "../../context/user_context";
+import { CartContext } from "../../context/cart_contex";
 
 function Header() {
-  const currentUser = useContext(UserContext)
-  const [isClicked, setIsClicked] = useState(false)
+  const { isClicked } = useContext(CartContext);
+  const currentUser = useContext(UserContext);
+
   return (
     <div className="Header">
       <Link className="logo-container" to="/">
@@ -32,11 +34,10 @@ function Header() {
             SIGN IN
           </Link>
         )}
-        <div onClick={() => setIsClicked(!isClicked)}>
-          <CardIcon />
-        </div>
+
+        <CardIcon />
       </div>
-       {isClicked && <Cart_dropdown /> } 
+      {isClicked && <Cart_dropdown />}
     </div>
   );
 }
