@@ -4,11 +4,13 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
+import {CurentUserProvider} from './context/user_context'
 ReactDOM.render(
-  
+  <CurentUserProvider>
     <BrowserRouter>
       <App />
     </BrowserRouter>
+    </CurentUserProvider>
   ,
   document.getElementById("root")
 );

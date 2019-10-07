@@ -1,13 +1,15 @@
-import React,{useState}  from "react";
+import React,{useState, useContext}  from "react";
 import { Link } from "react-router-dom";
 import { ReactComponent as Logo } from "../../assets/crown.svg";
 import CardIcon from "../card-icon/CardIcon";
 import "./Header-style.scss";
 import { auth } from "../../firebase/firebase.utils";
 import Cart_dropdown from "../cart-dropdown/Cart_dropdown";
-function Header({ currentUser }) {
-  const [isClicked, setIsClicked] = useState(false)
+import {UserContext} from '../../context/user_context'
 
+function Header() {
+  const currentUser = useContext(UserContext)
+  const [isClicked, setIsClicked] = useState(false)
   return (
     <div className="Header">
       <Link className="logo-container" to="/">
