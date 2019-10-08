@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import Form_input from "../form-input/Form_input";
 import './Signin_component.scss'
 import Button from '../custom-btton/Button'
@@ -49,4 +49,4 @@ function Signin_component() {
     </div>
   );
 }
-export default Signin_component;
+export default memo (Signin_component);

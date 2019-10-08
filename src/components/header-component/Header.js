@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, memo } from "react";
 import { Link } from "react-router-dom";
 import { ReactComponent as Logo } from "../../assets/crown.svg";
 import CardIcon from "../card-icon/CardIcon";
@@ -41,4 +41,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default memo (Header);

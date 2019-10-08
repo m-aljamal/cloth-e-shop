@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState , memo} from 'react';
 import Form_input from '../form-input/Form_input'
 import Button from '../custom-btton/Button'
 import {auth, createUserProfileDocument} from '../../firebase/firebase.utils'
@@ -75,4 +75,4 @@ const handleSubmit = async (e) =>{
     );
 
     }
-export default Sign_up
+export default memo (Sign_up)
