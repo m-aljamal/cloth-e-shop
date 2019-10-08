@@ -8,7 +8,6 @@ import { CartContext } from "../../context/cart_contex";
 function Cart_dropdown({ history }) {
   const state = useContext(ItemContext);
   const { dispatch } = useContext(CartContext);
-  console.log(dispatch);
   return (
     <div className="cart-dropdown">
       <div className="cart-items">

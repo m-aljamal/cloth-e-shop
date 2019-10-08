@@ -3,7 +3,7 @@ import "./Items-style.scss";
 import Button from '../custom-btton/Button'
 import {AddItemContext} from '../../context/cart_contex'
 function Items({ item }) {
-  const  addItem = useContext(AddItemContext);
+  const  dispatchItem = useContext(AddItemContext);
   const {name, price, imageUrl} = item
   return (
     <div className="Items">
@@ -12,7 +12,7 @@ function Items({ item }) {
             <span className='Items-name'>{name}</span>
             <span className='Items-price'>{price}</span>
         </div>
-      <Button onClick={() => addItem({type: 'ADD_ITEM', item: item })} > Add to cart </Button>
+      <Button onClick={() => dispatchItem({type: 'ADD_ITEM', item: item })} > Add to cart </Button>
     </div>
   );
 }

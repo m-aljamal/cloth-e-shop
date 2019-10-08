@@ -6,12 +6,7 @@ function Checkout_page() {
     const state = useContext(ItemContext)
     // get the total amount that should be paid
     let totlat = state.map(item => item.price * item.quantity).reduce((acc, cure) => acc + cure, 0) 
-    // id: 3
-    // imageUrl: "https://i.ibb.co/QdJwgmp/brown-cowboy.png"
-    // name: "Brown Cowboy"
-    // price: 35
-    // quantity: 1
-    console.log(totlat)
+   
   return (
     <div className="checkout-page">
       <div className="checkout-header">
