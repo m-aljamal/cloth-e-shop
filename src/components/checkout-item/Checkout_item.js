@@ -3,7 +3,6 @@ import "./Checkout_item.scss";
 import { AddItemContext } from "../../context/cart_contex";
 
 function Checkout_item({ item  }) {
-  console.log(item)
   const dispatchItem = useContext(AddItemContext);
   return (
     <div className="checkout-item">

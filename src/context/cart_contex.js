@@ -1,9 +1,9 @@
 import { addItemToCard, removeItemFromCart } from "./cart_utils";
 
-import React, { createContext, useReducer } from "react";
+import React, { createContext, useReducer, useEffect } from "react";
 let INITIAL_STATE = {
   hidden: false,
-  cartItems: []
+    cartItems: JSON.parse(window.localStorage.getItem('cartItems') || '[]')
 };
 
 const ItemsAddReducer = (state, action) => {
@@ -16,11 +16,10 @@ const ItemsAddReducer = (state, action) => {
       return state.map(item =>
         item.id === action.id ? { ...item, quantity: item.quantity + 1 } : item
       );
-     // decrement and remove item when quantity less than 1
+    // decrement and remove item when quantity less than 1
     case "DECREMENT_ITEM":
-      return removeItemFromCart(state, action.item)
-    
-   
+      return removeItemFromCart(state, action.item);
+
     default:
       return state;
   }
@@ -38,11 +37,16 @@ export const ItemContext = createContext();
 export const AddItemContext = createContext();
 
 export const CartContextProvider = props => {
+    
   const [isClicked, dispatch] = useReducer(CartReducer, INITIAL_STATE.hidden);
   const [state, dispatchItem] = useReducer(
     ItemsAddReducer,
     INITIAL_STATE.cartItems
   );
+
+  useEffect(() => {
+    window.localStorage.setItem("cartItems", JSON.stringify(state));
+  }, [state]);
 
   return (
     <AddItemContext.Provider value={dispatchItem}>
