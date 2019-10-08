@@ -135,18 +135,34 @@ useEffect(() => {
 
     
     
-********* redux section **************
 
-1: npm install --save redux redux-logger react-redux
-2: in index.js put the code and reducer codes:
-            import {Provider} from 'react-redux'  this round entire the all app, it is parent of the app
-            <Provider>
-                    <BrowserRouter>
-                      <App />
-                    </BrowserRouter>
-            </Provider>
-3: write the store:  
-        1.new folder in src name redux -> new file root-reducer.js will have all the state of app
-        2.create new folder inside redux name user so the state user from the app component will be moved here
-        
-        
+
+************* Adding items **********
+
+the items will be added in cart_context: 
+
+
+        const ItemsAddReducer = (state, action) =>{
+            switch (action.type) {
+                case 'ADD_ITEM':
+                    return addItemToCard(state, action.item)
+                default:
+                    return state
+            }
+        }
+
+the function addItemToCard   if item is the same  quantity will be increased:
+
+        export const addItemToCard = (cartItems, cartItemToAdd) =>{
+            const existingCartItems = cartItems.find(
+                cartItem => cartItem.id === cartItemToAdd.id
+            )
+            if(existingCartItems){
+                return cartItems.map(cartItem => 
+                    cartItem.id === cartItemToAdd.id
+                    ? {...cartItem, quantity: cartItem.quantity + 1 }
+                    : cartItem
+                    )
+            }
+            return [...cartItems, {...cartItemToAdd, quantity : 1}]
+        }

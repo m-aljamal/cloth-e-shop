@@ -10,7 +10,7 @@ const Preview_component = ({title, items}) => {
             {
                 // useing filter to get only 4 items from the list
                 items.filter((item, index) => index < 4 ).map(item => (
-                    <Items key={item.id} id={item.id} name={item.name} price={item.price} imageUrl={item.imageUrl}/>
+                    <Items key={item.id} item={item} />
                 ))
             }
           </div>
