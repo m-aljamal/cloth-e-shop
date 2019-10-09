@@ -6,7 +6,8 @@ import ShopPage from "./pages/shop-page/shop_component";
 import Header from "./components/header-component/Header";
 import SignIn from "./pages/singin-and-signup-page/SignIn";
 import { UserContext } from "./context/user_context";
-import checkout_page from './pages/checkout-page/Checkout_page'
+import checkout_page from "./pages/checkout-page/Checkout_page";
+import CategoryPage from "./pages/category/Category";
 function App() {
   const currentUser = useContext(UserContext);
 
@@ -21,6 +22,7 @@ function App() {
         <Route exact path="/" component={HomePage} />
         <Route exact path="/shop" component={ShopPage} />
         <Route exact path="/checkout" component={checkout_page} />
+        <Route exact path="/shop/:categoryId" component={CategoryPage} />
         {/* make user cannot go to sign in if curent user is alredy sign in */}
         <Route
           exacr

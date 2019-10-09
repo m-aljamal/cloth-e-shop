@@ -1,9 +1,10 @@
 import { addItemToCard, removeItemFromCart } from "./cart_utils";
+import SHOP_DATA from "./shop.data.js";
 
-import React, { createContext, useReducer, useEffect } from "react";
+import React, { createContext, useReducer, useEffect, useState } from "react";
 let INITIAL_STATE = {
   hidden: false,
-    cartItems: JSON.parse(window.localStorage.getItem('cartItems') || '[]')
+  cartItems: JSON.parse(window.localStorage.getItem("cartItems") || "[]")
 };
 
 const ItemsAddReducer = (state, action) => {
@@ -35,26 +36,29 @@ const CartReducer = (state, action) => {
 export const CartContext = createContext();
 export const ItemContext = createContext();
 export const AddItemContext = createContext();
+export const DataContext = createContext();
 
 export const CartContextProvider = props => {
-    
   const [isClicked, dispatch] = useReducer(CartReducer, INITIAL_STATE.hidden);
   const [state, dispatchItem] = useReducer(
     ItemsAddReducer,
     INITIAL_STATE.cartItems
   );
+  const [DataItems] = useState(SHOP_DATA);
 
   useEffect(() => {
     window.localStorage.setItem("cartItems", JSON.stringify(state));
   }, [state]);
 
   return (
-    <AddItemContext.Provider value={dispatchItem}>
-      <ItemContext.Provider value={state}>
-        <CartContext.Provider value={{ isClicked, dispatch }}>
-          {props.children}
-        </CartContext.Provider>
-      </ItemContext.Provider>
-    </AddItemContext.Provider>
+    <DataContext.Provider value={DataItems}>
+      <AddItemContext.Provider value={dispatchItem}>
+        <ItemContext.Provider value={state}>
+          <CartContext.Provider value={{ isClicked, dispatch }}>
+            {props.children}
+          </CartContext.Provider>
+        </ItemContext.Provider>
+      </AddItemContext.Provider>
+    </DataContext.Provider>
   );
 };

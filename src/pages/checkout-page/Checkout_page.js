@@ -2,6 +2,7 @@ import React,{useContext} from "react";
 import './Checkout_page.scss'
 import {ItemContext} from '../../context/cart_contex'
 import Checkout_item from '../../components/checkout-item/Checkout_item'
+import Stripe_button from '../../components/stripe-button/Stripe_button'
 function Checkout_page() {
     const state = useContext(ItemContext)
     // get the total amount that should be paid
@@ -34,7 +35,10 @@ function Checkout_page() {
 <div className='total'>
        <span>TOTAL: ${totlat}</span>
    </div>
-
+   <div className='test-warning'>
+ card test number : 4242424242424242- exp: 01/20 - cvv 123
+   </div>
+<Stripe_button price={totlat}/>
     </div>
     
   

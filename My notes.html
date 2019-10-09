@@ -166,3 +166,14 @@ the function addItemToCard   if item is the same  quantity will be increased:
             }
             return [...cartItems, {...cartItemToAdd, quantity : 1}]
         }
+
+******** adding stripe payment methoud ********************
+- create account in stripe site if don't have 
+- npm install --save react-stripe-checkout  
+- in the application I create new folder namr stipe_button.js 
+-import StripeCheckout from 'react-stripe-checkout'
+- stripe need the price in cence if price is 5 it need 500 (5*100) 
+- need also publishablekey provided in the accout from site 
+-  <StripeCheckout
+      accept many probertes can see them in  react-stripe-checkout  docs 
+/>
