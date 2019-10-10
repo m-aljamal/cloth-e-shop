@@ -21,24 +21,62 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
   // query the database to check if user in database
   const userRef = firestore.doc(`users/${userAuth.uid}`);
   const snapShot = await userRef.get();
-  // if user doesn't exists create new user 
-    if(!snapShot.exists){
-        const {displayName, email} = userAuth
-        const createdAt = new Date()
+  // if user doesn't exists create new user
+  if (!snapShot.exists) {
+    const { displayName, email } = userAuth;
+    const createdAt = new Date();
 
-        try{
-            await userRef.set({
-                displayName,
-                email,
-                createdAt,
-                ...additionalData
-            })
-        } catch(error){
-            console.log('error creating user', error.message)
-        }
+    try {
+      await userRef.set({
+        displayName,
+        email,
+        createdAt,
+        ...additionalData
+      });
+    } catch (error) {
+      console.log("error creating user", error.message);
     }
-    return userRef
+  }
+  return userRef;
 };
+
+// adding the data that we have to the firebase
+// call this function where we have accecc the shop data in I call it in user_context
+export const addCollectionsAndDocuments = async (
+  collectionKey,
+  objectsToAdd
+) => {
+  // get the collection from firebase
+  const collectionRef = firestore.collection(collectionKey);
+  const batch = firestore.batch();
+  // loop throw objectsToAdd to add them
+  objectsToAdd.forEach(obj => {
+    // git new object referance and random genreate id
+    const newDocRef = collectionRef.doc();
+   
+    batch.set(newDocRef, obj);
+  });
+
+  return await batch.commit();
+};
+ 
+export const convertCollectionsSnapShotToMap = (collections) => {
+    // transorm data from array into pbjects
+    const transformCollection= collections.docs.map(doc => {
+        const {title, items} = doc.data()
+        return{
+         roteName: encodeURI(title.toLowerCase()),
+         id: doc.id,
+         title,
+         items
+        }
+    })
+    // transrom data into objects
+   return transformCollection.reduce((accumulator, collection) => {
+       accumulator[collection.title.toLowerCase()] = collection 
+       return accumulator
+     }, {})
+}
 
 firebase.initializeApp(config);
 

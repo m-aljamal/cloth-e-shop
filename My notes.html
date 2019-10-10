@@ -177,3 +177,57 @@ the function addItemToCard   if item is the same  quantity will be increased:
 -  <StripeCheckout
       accept many probertes can see them in  react-stripe-checkout  docs 
 />
+
+********************* Deployin app in Heroku ******************************
+- https://devcenter.heroku.com/articles/heroku-cli   here download heroku command 
+and falow the instractions from that page. 
+
+- create new project: heroku create app_name --buildpack https://github.com/mars/create-react-app-buildpack.git
+
+then git push heroku master 
+
+if the app sin in with google doesn't work we copy app url and go to firebase -> sin in methoud -> athorized domain -> add domain 
+
+******************* styles in js ***********************
+- most used library is https://www.styled-components.com/
+
+        npm install styled-components 
+        import styled from 'styled-components'
+        
+        const Text = styled.div`
+        color: red;
+        font-size: 28px;
+        border: ${({isActive})} => isActive ? `1px solid black` : `3px solid red` 
+        `
+        <Text isActive={true}>I have the style above</Text>
+
+- in last course I used classes styels material-ui. 
+
+************ firebase ********************************
+- moving data to firebase: 
+1: adding data which we have in the app to the database 
+        
+// adding the data that we have to the firebase
+// call this function where we have accecc the shop data in I call it in user_context
+export const addCollectionsAndDocuments = async (
+  collectionKey,
+  objectsToAdd
+) => {
+  // get the collection from firebase
+  const collectionRef = firestore.collection(collectionKey);
+  const batch = firestore.batch();
+  // loop throw objectsToAdd to add them
+  objectsToAdd.forEach(obj => {
+    // git new object referance and random genreate id
+    const newDocRef = collectionRef.doc();
+   
+    batch.set(newDocRef, obj);
+  });
+
+  return await batch.commit();
+};
+
+// adding data
+        // addCollectionsAndDocuments("collections", dataToArray.map(({title, items}) => ({title, items})));
+
+        

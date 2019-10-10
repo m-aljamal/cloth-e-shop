@@ -4,6 +4,7 @@ import {DataContext} from '../../context/cart_contex'
 import Preview_component from '../preview-collection/preview_component'
 function Collection_overview() {
     const DataItems = useContext(DataContext)
+
     return (
         <div className='collections-overview'>
           { DataItems.map(item =>

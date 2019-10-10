@@ -1,6 +1,5 @@
-import React, { createContext, useState, useEffect } from "react";
-import { auth, createUserProfileDocument } from "../firebase/firebase.utils";
-
+import React, { createContext, useState, useEffect,  } from "react";
+import { auth, createUserProfileDocument, addCollectionsAndDocuments } from "../firebase/firebase.utils";
 export const UserContext = createContext();
 
 export const CurentUserProvider = props => {
@@ -24,6 +23,8 @@ export const CurentUserProvider = props => {
         });
       } else {
         setCurrentUser(userAuth);
+        // adding data
+        // addCollectionsAndDocuments("collections", dataToArray.map(({title, items}) => ({title, items})));
       }
     });
   }, []);

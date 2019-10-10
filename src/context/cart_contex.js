@@ -1,7 +1,10 @@
 import { addItemToCard, removeItemFromCart } from "./cart_utils";
-import SHOP_DATA from "./shop.data.js";
-
 import React, { createContext, useReducer, useEffect, useState } from "react";
+import {
+  firestore,
+  convertCollectionsSnapShotToMap
+} from "../firebase/firebase.utils";
+
 let INITIAL_STATE = {
   hidden: false,
   cartItems: JSON.parse(window.localStorage.getItem("cartItems") || "[]")
@@ -37,6 +40,7 @@ export const CartContext = createContext();
 export const ItemContext = createContext();
 export const AddItemContext = createContext();
 export const DataContext = createContext();
+export const dataWithObjectType = createContext();
 
 export const CartContextProvider = props => {
   const [isClicked, dispatch] = useReducer(CartReducer, INITIAL_STATE.hidden);
@@ -44,21 +48,32 @@ export const CartContextProvider = props => {
     ItemsAddReducer,
     INITIAL_STATE.cartItems
   );
-  const [DataItems] = useState(SHOP_DATA);
+  const [DataItems, setDataItems] = useState([]);
+  const [objectData, setObjectData] = useState({});
 
   useEffect(() => {
+    // geting data from firebase
+    const collectionRef = firestore.collection("collections");
+    collectionRef.onSnapshot(async snapshot => {
+      const collectionsMap = convertCollectionsSnapShotToMap(snapshot);
+      // set the data come from firebase to the state
+      setObjectData(collectionsMap);
+      // add the data to the state after convert them into arrays
+      setDataItems(Object.keys(collectionsMap).map(key => collectionsMap[key]));
+    });
     window.localStorage.setItem("cartItems", JSON.stringify(state));
   }, [state]);
-
   return (
-    <DataContext.Provider value={DataItems}>
-      <AddItemContext.Provider value={dispatchItem}>
-        <ItemContext.Provider value={state}>
-          <CartContext.Provider value={{ isClicked, dispatch }}>
-            {props.children}
-          </CartContext.Provider>
-        </ItemContext.Provider>
-      </AddItemContext.Provider>
-    </DataContext.Provider>
+    <dataWithObjectType.Provider value={objectData}>
+      <DataContext.Provider value={DataItems}>
+        <AddItemContext.Provider value={dispatchItem}>
+          <ItemContext.Provider value={state}>
+            <CartContext.Provider value={{ isClicked, dispatch }}>
+              {props.children}
+            </CartContext.Provider>
+          </ItemContext.Provider>
+        </AddItemContext.Provider>
+      </DataContext.Provider>
+    </dataWithObjectType.Provider>
   );
 };
